@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Starożytność (Antyk)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .quiz-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .question {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+            background: #fafafa;
+        }
+        .question-text {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .option {
+            margin-bottom: 8px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .option:hover {
+            background: #e9f5ff;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        #results {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Test Wiedzy: Antyk</h1>
+    <form id="quizForm">
+        <div id="questions"></div>
+        <div class="btn-container">
+            <button type="button" onclick="checkAnswers()">Sprawdź wynik</button>
+        </div>
+    </form>
+    <div id="results"></div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            q: "Który z wymienionych motywów jest kluczowy dla mitu o Orfeuszu i Eurydyce?",
+            options: [
+                { text: "Motyw miłości silniejszej niż śmierć i niszczycielskiej mocy ciekawości.", correct: true, hint: "Orfeusz nie wytrzymał i spojrzał za siebie." },
+                { text: "Motyw buntu przeciwko bogom w imię dobra ludzkości.", correct: false },
+                { text: "Motyw nieuchronności losu i klątwy rodowej.", correct: false },
+                { text: "Motyw poszukiwania złotego runa.", correct: false }
+            ]
+        },
+        {
+            q: "W kontekście 'Iliady' Homera, bohater, który wybiera krótkie, ale sławne życie to:",
+            options: [
+                { text: "Bohater tragiczny", correct: false },
+                { text: "Bohater homerowy (heroiczny)", correct: true, hint: "Chodzi o etos Achillesa." },
+                { text: "Homo viator", correct: false },
+                { text: "Stoik", correct: false }
+            ]
+        },
+        {
+            q: "Na czym polega istota konfliktu tragicznego w 'Antygonie'?",
+            options: [
+                { text: "Na kłótni dwóch braci o tron.", correct: false },
+                { text: "Na zderzeniu prawa boskiego z prawem ludzkim.", correct: true, hint: "Antygona kontra Kreon." },
+                { text: "Na nieszczęśliwej miłości Antygony i Hajmona.", correct: false },
+                { text: "Na walce bogów o wpływy.", correct: false }
+            ]
+        },
+        {
+            q: "Co oznacza słynna sentencja Horacego 'Exegi monumentum'?",
+            options: [
+                { text: "Wezwanie do 'carpe diem'.", correct: false },
+                { text: "Przekonanie poety o nieśmiertelności jego twórczości.", correct: true, hint: "Pomnik trwalszy niż ze spiżu." },
+                { text: "Nakaz budowania świątyń.", correct: false },
+                { text: "Pochwała skromnego życia.", correct: false }
+            ]
+        },
+        {
+            q: "Według Arystotelesa, celem tragedii jest 'katharsis', czyli:",
+            options: [
+                { text: "Zrozumienie intrygi politycznej.", correct: false },
+                { text: "Oczyszczenie uczuć poprzez litość i trwogę.", correct: true, hint: "Duchowe przeżycie widza." },
+                { text: "Naśladowanie rzeczywistości (mimesis).", correct: false },
+                { text: "Wprowadzenie chóru.", correct: false }
+            ]
+        },
+        {
+            q: "Która koncepcja jest przypisywana Platonowi w 'Państwie'?",
+            options: [
+                { text: "Wizja państwa rządzonego przez filozofów.", correct: true, hint: "Filozofowie mają dostęp do idei dobra." },
+                { text: "Najwyższą wartością jest wolność jednostki.", correct: false },
+                { text: "Rządy najbogatszych.", correct: false },
+                { text: "Zniesienie wszelkich praw.", correct: false }
+            ]
+        },
+        {
+            q: "Jaki jest główny cel notatki syntetyzującej?",
+            options: [
+                { text: "Przepisanie fragmentów tekstu.", correct: false },
+                { text: "Zwięzłe zestawienie informacji z różnych tekstów.", correct: true, hint: "Łączenie faktów w spójną całość." },
+                { text: "Wyrażenie subiektywnej opinii.", correct: false },
+                { text: "Wypisanie trudnych słówek.", correct: false }
+            ]
+        },
+        {
+            q: "Jak nazywa się rzymski epos Wergiliusza?",
+            options: [
+                { text: "Odyseja", correct: false },
+                { text: "Eneida", correct: true, hint: "Losy Eneasza, przodka Rzymian." },
+                { text: "Metamorfozy", correct: false },
+                { text: "Antygona", correct: false }
+            ]
+        },
+        {
+            q: "Która postać jest symbolem cierpienia matki po stracie dzieci?",
+            options: [
+                { text: "Eurydyka", correct: false },
+                { text: "Niobe", correct: true, hint: "Skamieniała z żalu." },
+                { text: "Antygona", correct: false },
+                { text: "Penelopa", correct: false }
+            ]
+        },
+        {
+            q: "Kto napisał współczesną 'Penelopiadę'?",
+            options: [
+                { text: "Wisława Szymborska", correct: false },
+                { text: "Margaret Atwood", correct: true, hint: "Kanadyjska autorka." },
+                { text: "Olga Tokarczuk", correct: false },
+                { text: "Anna Ceglarska", correct: false }
+            ]
+        }
+    ];
+
+    function loadQuiz() {
+        const questionsContainer = document.getElementById('questions');
+        quizData.forEach((data, index) => {
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question';
+            qDiv.innerHTML = `
+                <div class="question-text">${index + 1}. ${data.q}</div>
+                <div class="options" id="options${index}">
+                    ${data.options.map((opt, i) => `
+                        <div class="option">
+                            <input type="radio" name="q${index}" value="${opt.correct}" id="q${index}o${i}">
+                            <label for="q${index}o${i}">${opt.text}</label>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="feedback" id="feedback${index}"></div>
+            `;
+            questionsContainer.appendChild(qDiv);
+        });
+    }
+
+    function checkAnswers() {
+        let score = 0;
+        quizData.forEach((data, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            const feedbackDiv = document.getElementById(`feedback${index}`);
+            feedbackDiv.style.display = 'block';
+
+            if (selected) {
+                if (selected.value === "true") {
+                    score++;
+                    feedbackDiv.innerHTML = "Dobrze! " + (data.options.find(o => o.correct).hint || "");
+                    feedbackDiv.className = "feedback correct";
+                } else {
+                    feedbackDiv.innerHTML = "Błędna odpowiedź.";
+                    feedbackDiv.className = "feedback incorrect";
+                }
+            } else {
+                feedbackDiv.innerHTML = "Nie wybrano odpowiedzi.";
+                feedbackDiv.className = "feedback incorrect";
+            }
+        });
+        document.getElementById('results').innerHTML = `Twój wynik: ${score} / ${quizData.length}`;
+    }
+
+    window.onload = loadQuiz;
+</script>
+
+</body>
+</html>
