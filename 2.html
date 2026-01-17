@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Starożytność (Antyk) - Rozszerzony</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f0f2f5;
+            color: #333;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .quiz-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-left: 6px solid #3498db;
+            background: #f9f9f9;
+            border-radius: 0 8px 8px 0;
+        }
+        .question-text {
+            font-weight: bold;
+            font-size: 1.15em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .options {
+            display: grid;
+            gap: 10px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option:hover {
+            background: #eef7ff;
+            border-color: #3498db;
+        }
+        input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        button, .nav-link {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+        }
+        .check-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        .check-btn:hover {
+            background-color: #2980b9;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .nav-link {
+            background-color: #95a5a6;
+            color: white;
+        }
+        .nav-link:hover {
+            background-color: #7f8c8d;
+        }
+        .feedback {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+            font-size: 0.95em;
+        }
+        .correct { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .incorrect { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        #results {
+            margin-top: 30px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.5em;
+            color: #2c3e50;
+        }
+        hr { margin: 40px 0; border: 0; border-top: 2px solid #eee; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1>Egzamin z Antyku</h1>
+    <p style="text-align: center; color: #666;">Sprawdź swoją wiedzę z literatury, filozofii i kultury starożytnej.</p>
+    
+    <form id="quizForm">
+        <div id="questions"></div>
+        
+        <div id="results"></div>
+
+        <div class="btn-container">
+            <button type="button" class="check-btn" onclick="checkAnswers()">Sprawdź moje odpowiedzi</button>
+        </div>
+
+        <hr>
+
+        <div class="btn-container">
+            <a href="2.html" class="nav-link">Przejdź do części 2 (Biblia) &rarr;</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    const quizData = [
+        {
+            q: "Jak nazywa się uroczyste wejście chóru na scenę w tragedii greckiej?",
+            options: [
+                { text: "Epejsodion", correct: false },
+                { text: "Parodos", correct: true, hint: "Parodos to pierwsza pieśń chóru wchodzącego na orchestrę." },
+                { text: "Exodos", correct: false },
+                { text: "Stasimon", correct: false }
+            ]
+        },
+        {
+            q: "Który z filozofów jest autorem słynnej 'alegorii jaskini', opisującej proces poznawania prawdy?",
+            options: [
+                { text: "Arystoteles", correct: false },
+                { text: "Sokrates", correct: false },
+                { text: "Platon", correct: true, hint: "Platon przedstawił ją w swoim dziele 'Państwo'." },
+                { text: "Heraklit", correct: false }
+            ]
+        },
+        {
+            q: "Czym charakteryzuje się tzw. 'porównanie homeryckie'?",
+            options: [
+                { text: "Jest bardzo krótkie i zwięzłe.", correct: false },
+                { text: "Człon porównujący jest rozbudowany do samodzielnego obrazu poetyckiego.", correct: true, hint: "Często opisuje ono zjawiska przyrody w odniesieniu do działań bohaterów." },
+                { text: "Zawsze odnosi się do bogów olimpijskich.", correct: false },
+                { text: "Nie zawiera słowa 'jak' lub 'jako'.", correct: false }
+            ]
+        },
+        {
+            q: "Która postać z mitologii jest symbolem tragicznego wyboru między życiem a pasją artystyczną?",
+            options: [
+                { text: "Narcyz", correct: false },
+                { text: "Orfeusz", correct: true, hint: "Orfeusz zstąpił do Hadesu, by odzyskać Eurydykę dzięki swojej muzyce." },
+                { text: "Marsjasz", correct: false },
+                { text: "Apollo", correct: false }
+            ]
+        },
+        {
+            q: "Kogo starożytni Grecy uważali za patrona teatru?",
+            options: [
+                { text: "Apolla", correct: false },
+                { text: "Dionizosa", correct: true, hint: "Teatr wyewoluował z obrzędów religijnych zwanych Wielkimi Dionizjami." },
+                { text: "Zeusa", correct: false },
+                { text: "Atenę", correct: false }
+            ]
+        },
+        {
+            q: "W 'Antygonie', siostra głównej bohaterki, Ismena, reprezentuje postawę:",
+            options: [
+                { text: "Buntu i odwagi.", correct: false },
+                { text: "Uległości wobec władzy i lęku przed karą.", correct: true, hint: "Ismena odmawia pomocy Antygonie, bojąc się gniewu Kreona." },
+                { text: "Nienawiści do zmarłego brata.", correct: false },
+                { text: "Religijnego fanatyzmu.", correct: false }
+            ]
+        },
+        {
+            q: "Zasada 'złotego środka' (aurea mediocritas) jest kluczowa dla twórczości:",
+            options: [
+                { text: "Homera", correct: false },
+                { text: "Sofoklesa", correct: false },
+                { text: "Horacego", correct: true, hint: "Rzymski poeta propagował umiar i spokój ducha." },
+                { text: "Wergiliusza", correct: false }
+            ]
+        },
+        {
+            q: "Jakie miasto jest celem wieloletniej wędrówki Odyseusza?",
+            options: [
+                { text: "Troja", correct: false },
+                { text: "Ateny", correct: false },
+                { text: "Ithaka", correct: true, hint: "Odyseusz wracał do swojej żony Penelopy i syna Telemacha." },
+                { text: "Rzym", correct: false }
+            ]
+        },
+        {
+            q: "Co oznacza termin 'mimesis' w teorii literatury Arystotelesa?",
+            options: [
+                { text: "Oczyszczenie emocjonalne widza.", correct: false },
+                { text: "Naśladowanie rzeczywistości przez sztukę.", correct: true, hint: "Sztuka według Arystotelesa powinna odtwarzać prawdopodobne działania ludzi." },
+                { text: "Zasada trzech jedności.", correct: false },
+                { text: "Wprowadzenie boga na scenę.", correct: false }
+            ]
+        },
+        {
+            q: "Wiersz Zbigniewa Herberta 'Apollo i Marsjasz' jest przykładem:",
+            options: [
+                { text: "Wiernego przepisania mitu.", correct: false },
+                { text: "Współczesnej reinterpretacji mitu (demitologizacji).", correct: true, hint: "Herbert pokazuje okrucieństwo boga i cierpienie artysty w nowy sposób." },
+                { text: "Eposu rycerskiego.", correct: false },
+                { text: "Hymnu religijnego.", correct: false }
+            ]
+        },
+        {
+            q: "Kreon, wydając zakaz pochówku Polinika, kierował się przede wszystkim:",
+            options: [
+                { text: "Osobistą zemstą na siostrzenicy.", correct: false },
+                { text: "Dobrem państwa i prawem stanowionym.", correct: true, hint: "Dla Kreona Polinik był zdrajcą ojczyzny." },
+                { text: "Nienawiścią do bogów.", correct: false },
+                { text: "Chęcią zdobycia majątku brata.", correct: false }
+            ]
+        },
+        {
+            q: "Słynny rzeźbiarz Poliklet stworzył 'kanon', czyli wzorzec:",
+            options: [
+                { text: "Idealnej budowy świątyni.", correct: false },
+                { text: "Idealnych proporcji ludzkiego ciała.", correct: true, hint: "Opierał się na matematycznych zależnościach między częściami ciała." },
+                { text: "Pisania tragedii.", correct: false },
+                { text: "Układania mozaiki.", correct: false }
+            ]
+        },
+        {
+            q: "Który gatunek literacki charakteryzuje się inwokacją na początku utworu?",
+            options: [
+                { text: "Tragedia", correct: false },
+                { text: "Epos", correct: true, hint: "Przykładem są 'Iliada' i 'Odyseja', które zaczynają się prośbą do Muzy." },
+                { text: "Pieśń", correct: false },
+                { text: "Komedia", correct: false }
+            ]
+        },
+        {
+            q: "Filozofia stoicka uczyła, że człowiek powinien:",
+            options: [
+                { text: "Szukać przyjemności za wszelką cenę.", correct: false },
+                { text: "Zachować spokój niezależnie od okoliczności (apatheia).", correct: true, hint: "Stoicyzm promuje życie zgodne z rozumem i naturą." },
+                { text: "Wątpić we wszystko, co widzi.", correct: false },
+                { text: "Buntować się przeciwko przeznaczeniu.", correct: false }
+            ]
+        },
+        {
+            q: "Pojęcie 'fatum' w literaturze antycznej oznacza:",
+            options: [
+                { text: "Szczęśliwy zbieg okoliczności.", correct: false },
+                { text: "Nieuchronne, niezmienne przeznaczenie.", correct: true, hint: "Nawet bogowie nie mogli zmienić wyroków Mojr." },
+                { text: "Karę za błędy młodości.", correct: false },
+                { text: "Prawo uchwalone przez zgromadzenie ludowe.", correct: false }
+            ]
+        }
+    ];
+
+    function loadQuiz() {
+        const questionsContainer = document.getElementById('questions');
+        quizData.forEach((data, index) => {
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question';
+            qDiv.innerHTML = `
+                <div class="question-text">${index + 1}. ${data.q}</div>
+                <div class="options" id="options${index}">
+                    ${data.options.map((opt, i) => `
+                        <label class="option" for="q${index}o${i}">
+                            <input type="radio" name="q${index}" value="${opt.correct}" id="q${index}o${i}">
+                            ${opt.text}
+                        </label>
+                    `).join('')}
+                </div>
+                <div class="feedback" id="feedback${index}"></div>
+            `;
+            questionsContainer.appendChild(qDiv);
+        });
+    }
+
+    function checkAnswers() {
+        let score = 0;
+        quizData.forEach((data, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            const feedbackDiv = document.getElementById(`feedback${index}`);
+            feedbackDiv.style.display = 'block';
+
+            if (selected) {
+                if (selected.value === "true") {
+                    score++;
+                    feedbackDiv.innerHTML = "<strong>Poprawnie!</strong> " + (data.options.find(o => o.correct).hint || "");
+                    feedbackDiv.className = "feedback correct";
+                } else {
+                    feedbackDiv.innerHTML = "<strong>Błąd.</strong> Spróbuj przypomnieć sobie definicję lub kontekst utworu.";
+                    feedbackDiv.className = "feedback incorrect";
+                }
+            } else {
+                feedbackDiv.innerHTML = "<strong>Uwaga:</strong> Nie wybrano żadnej odpowiedzi.";
+                feedbackDiv.className = "feedback incorrect";
+            }
+        });
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = `Twój wynik: ${score} / ${quizData.length}`;
+        resultsDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    window.onload = loadQuiz;
+</script>
+
+</body>
+</html>
